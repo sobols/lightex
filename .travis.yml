@@ -15,12 +15,14 @@ env:
 before_install:
   - eval "${MATRIX_EVAL}"
 script:
+  - set -e
+  - mkdir "${HOME}/boost" && cd "${HOME}/boost"
   - wget "https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz"
   - tar xzf "boost_1_65_1.tar.gz"
   - cd boost_1_65_1
-  - ./bootstrap.sh -d0 --with-libraries=filesystem,test --prefix="${HOME}/local"
+  - ./bootstrap.sh --with-libraries=filesystem,test --prefix="${HOME}/local"
   - ./b2 -d0 install
   - cd
   - mkdir -p build
   - cd build
-  - cmake -DBoost_NO_SYSTEM_PATHS=1 -DBOOST_ROOT="$HOME/local" ..
+  - cmake -DBoost_NO_SYSTEM_PATHS=1 -DBOOST_ROOT="${HOME}/local" "${TRAVIS_BUILD_DIR}"
