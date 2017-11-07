@@ -40,6 +40,11 @@ struct ProgramNode : x3::variant<x3::forward_ast<ParagraphBreaker>,
                                  x3::forward_ast<EnvironmentMacro>,
                                  x3::forward_ast<ArgumentRef>,
                                  x3::forward_ast<OuterArgumentRef>> {
+
+  ProgramNode& operator=(const ProgramNode&) = default;
+  ProgramNode(const ProgramNode&) = default;
+  ProgramNode() = default;
+
   using base_type::base_type;
   using base_type::operator=;
 };
@@ -49,6 +54,11 @@ struct ParagraphNode : x3::variant<x3::forward_ast<PlainText>,
                                    x3::forward_ast<Command>,
                                    x3::forward_ast<UnescapedCommand>,
                                    x3::forward_ast<NparagraphCommand>> {
+
+  ParagraphNode& operator=(const ParagraphNode&) = default;
+  ParagraphNode(const ParagraphNode&) = default;
+  ParagraphNode() = default;
+
   using base_type::base_type;
   using base_type::operator=;
 };
@@ -60,6 +70,11 @@ struct ArgumentNode : x3::variant<x3::forward_ast<PlainText>,
                                   x3::forward_ast<NparagraphCommand>,
                                   x3::forward_ast<ArgumentRef>,
                                   x3::forward_ast<OuterArgumentRef>> {
+
+  ArgumentNode& operator=(const ArgumentNode&) = default;
+  ArgumentNode(const ArgumentNode&) = default;
+  ArgumentNode() = default;
+
   using base_type::base_type;
   using base_type::operator=;
 };
