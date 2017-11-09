@@ -84,3 +84,8 @@ BOOST_AUTO_TEST_CASE(TestEscaping) {
   t.fail("\\a");
   t.check("\\\\", "<p>\\</p>");
 }
+
+BOOST_AUTO_TEST_CASE(TestUnicode) {
+  Tester t;
+  t.check("Привет, мир!", "<p>Привет, мир!</p>");
+}
