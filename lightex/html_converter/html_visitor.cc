@@ -4,11 +4,15 @@
 #include <list>
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <sstream>
 
 namespace lightex {
 namespace html_converter {
 namespace {
+
+const std::map<std::string, std::string> kLookupTableSymbols = {
+    {"\\,", "&thinsp;"}, {"~", "&nbsp;"}, {"---", "&mdash;"}, {"--", "&ndash;"}, {"<<", "&laquo;"}, {">>", "&raquo;"}};
 
 std::string FormatText(const std::string& unformatted) {
   std::ostringstream buffer;
@@ -77,6 +81,23 @@ std::string EscapeStringForJs(const std::string& unescaped) {
   return buffer.str();
 }
 
+std::string EscapeDollarSigns(const std::string& unescaped) {
+  std::ostringstream buffer;
+
+  for (char c : unescaped) {
+    switch (c) {
+      case '$':
+        buffer << "\\$";
+        break;
+
+      default:
+        buffer << c;
+    }
+  }
+
+  return buffer.str();
+}
+
 std::string RenderMathFormula(const std::string& math_text, bool is_inlined, int* math_text_span_num) {
   std::string span_id = "mathTextSpan" + std::to_string(++(*math_text_span_num));
   std::string display_mode = is_inlined ? "false" : "true";
@@ -86,7 +107,7 @@ std::string RenderMathFormula(const std::string& math_text, bool is_inlined, int
 
   buffer << "<script type=\"text/javascript\">";
   buffer << "katex.render(";
-  buffer << "\"" << EscapeStringForJs(math_text) << "\", ";
+  buffer << "\"" << EscapeStringForJs(EscapeDollarSigns(math_text)) << "\", ";
   buffer << "document.getElementById(\"" << span_id << "\"), {displayMode: " << display_mode << "});";
   buffer << "</script>";
 
@@ -119,12 +140,22 @@ Result HtmlVisitor::operator()(const ast::Program& program) {
 }
 
 Result HtmlVisitor::operator()(const ast::PlainText& plain_text) {
+  const auto it = kLookupTableSymbols.find(plain_text.text);
+  if (it != kLookupTableSymbols.end()) {
+    return Result::Success(it->second, it->second);
+  }
+
   return Result::Success(EscapeStringForHtml(FormatText(plain_text.text)), plain_text.text);
 }
 
 Result HtmlVisitor::operator()(const ast::Paragraph& paragraph) {
   Result result = JoinNodeResults(paragraph.nodes);
   if (!result.is_successful) {
+    return result;
+  }
+
+  std::string formatted_result = FormatText(result.escaped);
+  if (formatted_result.empty() || formatted_result == " ") {
     return result;
   }
 
@@ -222,7 +253,10 @@ Result HtmlVisitor::operator()(const ast::UnescapedCommand& unescaped_command) {
 Result HtmlVisitor::operator()(const ast::NparagraphCommand& nparagraph_command) {
   Result result = (*this)(nparagraph_command.body);
 
-  result.breaks_paragraph = true;
+  if (result.is_successful) {
+    result.breaks_paragraph = true;
+  }
+
   return result;
 }
 
