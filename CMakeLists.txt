@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_BUILD_TYPE Debug)
 
+add_subdirectory(lightex/styles)
+
 # Define lightex_root variable
 get_filename_component(lightex_root . ABSOLUTE)
 
@@ -38,7 +40,7 @@ add_executable(parse_program_to_dot ${lightex_root}/lightex/binaries/parse_progr
 target_link_libraries(parse_program_to_dot lightex)
 
 add_executable(parse_program_to_html ${lightex_root}/lightex/binaries/parse_program_to_html.cc)
-target_link_libraries(parse_program_to_html lightex)
+target_link_libraries(parse_program_to_html lightex styles)
 
 # Unittest
 add_executable(tester ${lightex_root}/tests/main.cc)

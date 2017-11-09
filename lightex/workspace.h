@@ -10,7 +10,7 @@ class Workspace {
  public:
   virtual ~Workspace() {}
 
-  virtual bool LoadStyle(const std::string& style_file_path, std::string* error_message) = 0;
+  virtual bool LoadStyle(const std::string& style_file_data, std::string* error_message) = 0;
   virtual bool ParseProgram(const std::string& input, std::string* error_message, std::string* output) = 0;
 };
 

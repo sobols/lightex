@@ -5,6 +5,9 @@
 #include <lightex/workspace.h>
 #include <lightex/utils/file_utils.h>
 
+extern const char LIGHTEX_STY_DATA[];
+extern const size_t LIGHTEX_STY_LENGTH;
+
 int main(int argc, char** argv) {
   char const* input_file;
   char const* output_file;
@@ -24,7 +27,8 @@ int main(int argc, char** argv) {
 
   std::shared_ptr<lightex::Workspace> workspace = lightex::MakeHtmlWorkspace();
   std::string error_message;
-  if (!workspace->LoadStyle("lightex/styles/lightex.sty", &error_message)) {
+  std::string lightex_sty{ LIGHTEX_STY_DATA, LIGHTEX_STY_LENGTH };
+  if (!workspace->LoadStyle(lightex_sty, &error_message)) {
     std::cerr << "Error: failed to preload style file!" << std::endl;
     std::cerr << error_message << std::endl;
     return 1;

@@ -49,7 +49,7 @@ class DotWorkspace : public Workspace {
  public:
   ~DotWorkspace() {}
 
-  bool LoadStyle(const std::string& style_file_path, std::string* error_message) override {
+  bool LoadStyle(const std::string& style_file_data, std::string* error_message) override {
     return false;
   }
 
@@ -72,14 +72,9 @@ class HtmlWorkspace : public Workspace {
  public:
   ~HtmlWorkspace() {}
 
-  bool LoadStyle(const std::string& style_file_path, std::string* error_message) override {
-    std::string input;
-    if (!lightex::utils::ReadDataFromFile(style_file_path, &input)) {
-      return false;
-    }
-
+  bool LoadStyle(const std::string& style_file_data, std::string* error_message) override {
     ast::Program ast;
-    if (!ParseProgramToAst(input, error_message, &ast)) {
+    if (!ParseProgramToAst(style_file_data, error_message, &ast)) {
       return false;
     }
 
