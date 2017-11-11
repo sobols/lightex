@@ -44,7 +44,21 @@ add_executable(tester ${lightex_root}/tests/main.cc)
 target_link_libraries(tester lightex ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 # Python module
-add_library(pylightex SHARED
-    ${lightex_src_files}
-    ${lightex_root}/lightex/pymod/extension.cc
-)
+
+find_package(PythonLibs)
+if(PYTHONLIBS_FOUND)
+    message(STATUS "Python is found")
+    include_directories("${PYTHON_INCLUDE_DIRS}")
+    add_library(pylightex MODULE
+		${lightex_root}/lightex/pymod/extension.cc
+		${lightex_root}/lightex/pymod/extension.h
+		${lightex_root}/lightex/pymod/pylightex.cc
+		${lightex_root}/lightex/pymod/pylightex.h
+	)
+    target_link_libraries(pylightex lightex ${PYTHON_LIBRARIES})
+    if(WIN32)
+        set_target_properties(pylightex PROPERTIES SUFFIX ".pyd")
+    endif(WIN32)
+else(PYTHONLIBS_FOUND)
+    message(WARNING "Python is not found")
+endif(PYTHONLIBS_FOUND) 
