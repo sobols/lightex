@@ -188,7 +188,7 @@ PyInit_pylightex(void)
 
 #define INITERROR return
 
-void
+PyMODINIT_FUNC
 initpylightex(void)
 #endif
 {
