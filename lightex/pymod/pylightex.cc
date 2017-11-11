@@ -5,6 +5,16 @@
 
 #include <stdexcept>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+#endif
+
+#define MODULE_DOC "LighTeX-based TeX -> HTML converter library"
+
+/**
+* module state
+*/
+
 // Python does not support module unloading,
 // so nobody deletes this pointer :(
 lightex::extension::Module* gModule;
@@ -12,7 +22,14 @@ lightex::extension::Module* gModule;
 static PyObject* LighTeXError;
 static PyTypeObject lightex_ResultType;
 
-typedef struct { PyObject_HEAD lightex::extension::Context* ctxt; } lightex_ContextObject;
+/**
+* Context
+*/
+
+typedef struct {
+  PyObject_HEAD
+    lightex::extension::Context* ctxt;
+} lightex_ContextObject;
 
 static int lightex_ContextObject_init(lightex_ContextObject* self, PyObject* args, PyObject* kwds) {
   int builtinKaTeX = 0;
@@ -126,10 +143,9 @@ static PyTypeObject lightex_ContextType = {
   0,                                                  /* tp_new */
 };
 
-/* List of functions defined in the module */
-static PyMethodDef lightex_methods[] = {
-  { NULL } /* sentinel */
-};
+/**
+* Result
+*/
 
 static PyStructSequence_Field lightex_ResultType_fields[] = {
   { "ok", "Success" },
@@ -145,22 +161,52 @@ static PyStructSequence_Desc lightex_ResultType_desc = {
   3
 };
 
-#ifndef PyMODINIT_FUNC /* declarations for DLL import/export */
-#define PyMODINIT_FUNC void
-#endif
-PyMODINIT_FUNC initpylightex(void) {
-  PyObject* m;
+/**
+* module
+*/
 
-  m = Py_InitModule3("pylightex", lightex_methods, "LighTeX-based TeX -> HTML converter library");
+/* List of functions defined in the module */
+static PyMethodDef lightex_methods[] = {
+  { NULL } /* sentinel */
+};
+
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef moduledef = {
+  PyModuleDef_HEAD_INIT,
+  "pylightex",
+  MODULE_DOC,
+  -1,
+  lightex_methods,
+};
+
+#define INITERROR return NULL
+
+PyMODINIT_FUNC
+PyInit_pylightex(void)
+#else
+
+#define INITERROR return
+
+void
+initpylightex(void)
+#endif
+{
+#if PY_MAJOR_VERSION >= 3
+  PyObject* m = PyModule_Create(&moduledef);
+#else
+  PyObject* m = Py_InitModule3("pylightex", lightex_methods, MODULE_DOC);
+#endif
+
   if (m == NULL) {
-    return;
+    INITERROR;
   }
 
   // context
   lightex_ContextType.tp_base = &PyBaseObject_Type;
   lightex_ContextType.tp_new = PyType_GenericNew;
   if (PyType_Ready(&lightex_ContextType) < 0) {
-    return;
+    INITERROR;
   }
   Py_INCREF(&lightex_ContextType);
   PyModule_AddObject(m, "Context", (PyObject*)&lightex_ContextType);
@@ -176,7 +222,7 @@ PyMODINIT_FUNC initpylightex(void) {
   if (LighTeXError == NULL) {
     LighTeXError = PyErr_NewException("pylightex.error", NULL, NULL);
     if (LighTeXError == NULL) {
-      return;
+      INITERROR;
     }
   }
   Py_INCREF(LighTeXError);
@@ -186,6 +232,9 @@ PyMODINIT_FUNC initpylightex(void) {
     gModule = new lightex::extension::Module();
   } catch (const std::exception& ex) {
     PyErr_SetString(LighTeXError, ex.what());
-    return;
   }
+
+#if PY_MAJOR_VERSION >= 3
+  return m;
+#endif
 }
