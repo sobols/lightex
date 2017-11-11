@@ -42,3 +42,9 @@ target_link_libraries(parse_program_to_html lightex styles)
 # Unittest
 add_executable(tester ${lightex_root}/tests/main.cc)
 target_link_libraries(tester lightex ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+
+# Python module
+add_library(pylightex SHARED
+    ${lightex_src_files}
+    ${lightex_root}/lightex/pymod/extension.cc
+)

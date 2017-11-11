@@ -17,4 +17,9 @@ class Workspace {
 std::shared_ptr<Workspace> MakeDotWorkspace();
 std::shared_ptr<Workspace> MakeHtmlWorkspace();
 
+namespace ast {
+  struct Program;
+}
+bool ParseProgramToAst(const std::string& input, std::string* error_message, ast::Program* output);
+
 }  // namespace lightex

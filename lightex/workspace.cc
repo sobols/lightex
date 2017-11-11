@@ -11,13 +11,12 @@
 
 #include <boost/spirit/home/x3.hpp>
 
+namespace x3 = boost::spirit::x3;
+
 namespace lightex {
-namespace {
 
 const char kSyntaxParsingError[] = "Error while running syntax analysis! Failed on the following snippet: ";
 const int kFailedSnippetLength = 30;
-
-namespace x3 = boost::spirit::x3;
 
 bool ParseProgramToAst(const std::string& input, std::string* error_message, ast::Program* output) {
   if (!output) {
@@ -41,6 +40,8 @@ bool ParseProgramToAst(const std::string& input, std::string* error_message, ast
 
   return true;
 }
+
+namespace {
 
 class DotWorkspace : public Workspace {
  public:
