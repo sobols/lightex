@@ -52,12 +52,13 @@ if(PYTHONLIBS_FOUND)
     message(STATUS "Python is found")
     include_directories("${PYTHON_INCLUDE_DIRS}")
     add_library(pylightex MODULE
-		${lightex_root}/lightex/pymod/extension.cc
-		${lightex_root}/lightex/pymod/extension.h
-		${lightex_root}/lightex/pymod/pylightex.cc
-		${lightex_root}/lightex/pymod/pylightex.h
-	)
+        ${lightex_root}/lightex/pymod/extension.cc
+        ${lightex_root}/lightex/pymod/extension.h
+        ${lightex_root}/lightex/pymod/pylightex.cc
+        ${lightex_root}/lightex/pymod/pylightex.h
+    )
     target_link_libraries(pylightex lightex styles ${PYTHON_LIBRARIES})
+    set_target_properties(pylightex PROPERTIES PREFIX "")
     if(WIN32)
         set_target_properties(pylightex PROPERTIES SUFFIX ".pyd")
     endif(WIN32)
