@@ -1,4 +1,7 @@
 build/
 *.sublime-workspace
+*.pyd
 /.vs
 /CMakeSettings.json
+/tests/canon/data/*.log
+/tests/canon/data/*.output.html

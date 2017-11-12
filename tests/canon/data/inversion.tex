@@ -1,0 +1,35 @@
+\begin{problem}{Inversion}{\textsl{standard input}}{\textsl{standard output}}{2 seconds}{512 mebibytes}{}
+
+You have a sequence $a_1, a_2, \dots, a_n$. It is allowed to swap two
+\textbf{adjacent} numbers no more than $k$ times.
+
+Find the minimal number of inversions after the swaps (number of inversions is the number of pairs $(i, j)$ where
+$1 \leq i < j \leq n$ and $a_i > a_j$).
+
+\InputFile
+
+The first line of the input contains two integers $n$, $k$
+($1 \leq n \leq 10^5$, $0 \leq k \leq 10^9$). The second line contains $n$
+integers $a_1, a_2, \dots, a_n$ ($0 \leq a_i \leq 10^9$).
+
+\OutputFile
+
+Print the minimum number of inversions.
+
+\Examples
+
+\begin{example}%
+\exmp{%
+3 1
+2 2 1
+}{%
+1
+}%
+\exmp{%
+3 0
+2 2 1
+}{%
+2
+}%
+\end{example}
+\end{problem}

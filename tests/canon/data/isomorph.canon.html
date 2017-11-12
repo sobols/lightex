@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>isomorph</title>
+    <link rel="stylesheet" type="text/css" href="static/lightex.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha1/katex.min.css" integrity="sha384-8QOKbPtTFvh/lMY0qPVbXj9hDh+v8US0pD//FcoYFst2lCIf0BmT58+Heqj0IGyx" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha1/katex.min.js" integrity="sha384-GR8SEkOO1rBN/jnOcQDFcFmwXAevSLx7/Io9Ps1rkxWp983ZIuUGfxivlF/5f5eJ" crossorigin="anonymous"></script>
+
+    </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="problem-statement">
+   <h2>Изоморфизм графов</h2> <div class="infos">  Имя входного файла: стандартный ввод.\ Имя выходного файла: стандартный вывод.\ Ограничение по времени: 2 секунды.\ Ограничение по памяти: 512 мебибайт. </div> <p>Даны два неориентированных графа без петель. Требуется проверить, являются ли графы изоморфными.</p><h3>Формат входного файла</h3><p>В первой строке находятся два числа <span id="mathTextSpan1"></span><script type="text/javascript">katex.render("N_1", document.getElementById("mathTextSpan1"), {displayMode: false});</script> и <span id="mathTextSpan2"></span><script type="text/javascript">katex.render("M_1", document.getElementById("mathTextSpan2"), {displayMode: false});</script>&nbsp;&mdash; число вершин и рёбер первого графа соответственно (<span id="mathTextSpan3"></span><script type="text/javascript">katex.render("1 \u005cle N_1 \u005cle 15", document.getElementById("mathTextSpan3"), {displayMode: false});</script>).</p><p>В каждой из следующих <span id="mathTextSpan4"></span><script type="text/javascript">katex.render("M_1", document.getElementById("mathTextSpan4"), {displayMode: false});</script> строк расположена пара <span id="mathTextSpan5"></span><script type="text/javascript">katex.render("(a, b)", document.getElementById("mathTextSpan5"), {displayMode: false});</script> чисел от 0 до <span id="mathTextSpan6"></span><script type="text/javascript">katex.render("N_1 - 1", document.getElementById("mathTextSpan6"), {displayMode: false});</script>, означающая, что вершины <span id="mathTextSpan7"></span><script type="text/javascript">katex.render("a", document.getElementById("mathTextSpan7"), {displayMode: false});</script> и <span id="mathTextSpan8"></span><script type="text/javascript">katex.render("b", document.getElementById("mathTextSpan8"), {displayMode: false});</script> соединены ребром.</p><p>Далее абсолютно аналогичным образом задаётся и второй граф.</p><h3>Формат выходного файла</h3><p>Выведите одну строку YES, если графы являются изоморфными, и NO в противном случае.</p><h3>Пример</h3>  <table class="inputs-outputs">  <tr>  <th>  стандартный ввод  </th>  <th>  стандартный вывод  </th>  </tr>      <tr>  <td>5 3
+1 2
+2 3
+3 4
+5 3
+1 3
+3 2
+2 4
+</td>  <td>YES
+</td>  </tr>      </table>  <p><img src="static/fig1.png" /></p><h3>Пример</h3>  <table class="inputs-outputs">  <tr>  <th>  стандартный ввод  </th>  <th>  стандартный вывод  </th>  </tr>      <tr>  <td>5 2
+1 2
+1 3
+5 1
+1 2
+</td>  <td>NO
+</td>  </tr>      </table>  <p><img src="static/fig1.png" /> <img src="static/fig2.png" /></p><h3>Пример</h3>  <table class="inputs-outputs">  <tr>  <th>  стандартный ввод  </th>  <th>  стандартный вывод  </th>  </tr>      <tr>  <td>5 2
+1 2
+1 3
+5 1
+1 2
+</td>  <td>NO
+</td>  </tr>      </table>  <p> <img src="static/fig1.png" /><img src="static/fig2.png" /></p>  
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>trees-1</title>
+    <link rel="stylesheet" type="text/css" href="static/lightex.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha1/katex.min.css" integrity="sha384-8QOKbPtTFvh/lMY0qPVbXj9hDh+v8US0pD//FcoYFst2lCIf0BmT58+Heqj0IGyx" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha1/katex.min.js" integrity="sha384-GR8SEkOO1rBN/jnOcQDFcFmwXAevSLx7/Io9Ps1rkxWp983ZIuUGfxivlF/5f5eJ" crossorigin="anonymous"></script>
+
+    </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="problem-statement">
+   <p>Найти среднюю по значению вершину из вершин дерева, у которых число потомков в левом поддереве не равно числу потомков в правом поддерева. Удалить её (правым удалением), если такая вершина существует. Выполнить прямой левый обход полученного дерева.</p><h3>Формат входного файла</h3><p>Входной файл содержит последовательность чисел&nbsp;&mdash; ключи вершин в порядке добавления в дерево.</p><h3>Формат выходного файла</h3><p>Выходной файл должен содержать последовательность ключей вершин, полученную прямым левым обходом итогового дерева.</p><h3>Пример</h3>  <table class="inputs-outputs">  <tr>  <th>  in.txt  </th>  <th>  out.txt  </th>  </tr>      <tr>  <td>20
+8
+40
+42
+14
+4
+13
+41
+5
+1
+</td>  <td>40
+8
+4
+1
+5
+14
+13
+42
+41
+</td>  </tr>      </table>  <div class="center-block"><p> <img src="static/fig1.png" /><img src="static/fig2.png" /></p></div> <h3><i>Замечание</i></h3><p>В случае неоднозначности выбора удаляемой вершины (например, несколько путей максимальной длины между вершинами с разным числом потомков и с минимальной суммой ключей конечных вершин имеют один и тот же корень, но средние по значению вершины этих путей не совпадают) ничего из дерева удалять не нужно.</p>  
+      </div>
+    </div>
+  </body>
+</html>

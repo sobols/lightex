@@ -1,0 +1,75 @@
+\begin{problem}{Изоморфизм графов}{\textsl{стандартный ввод}}{\textsl{стандартный вывод}}{2 секунды}{512 мебибайт}{}
+
+Даны два неориентированных графа без петель. Требуется проверить, являются ли 
+графы изоморфными.
+
+\InputFile
+
+В первой строке находятся два числа $N_1$ и $M_1$~---
+число вершин и рёбер первого графа соответственно ($1 \le N_1 \le 15$).
+
+В каждой из следующих $M_1$ строк расположена пара $(a, b)$ чисел от 0 до $N_1 - 1$,
+означающая, что вершины $a$ и $b$ соединены ребром.
+
+Далее абсолютно аналогичным образом задаётся и второй граф.
+
+\OutputFile
+
+Выведите одну строку \texttt{YES}, если графы 
+являются изоморфными, и \texttt{NO} в противном случае.
+
+\Example
+
+\begin{example}%
+\exmp{% input
+5 3
+1 2
+2 3
+3 4
+5 3
+1 3
+3 2
+2 4
+}{% output
+YES
+}%
+\end{example}
+
+
+\includegraphics{static/fig1.png}
+
+\Example
+
+\begin{example}%
+\exmp{% input
+5 2
+1 2
+1 3
+5 1
+1 2
+}{% output
+NO
+}%
+\end{example}
+
+\includegraphics{static/fig1.png}
+\includegraphics{static/fig2.png}
+
+
+\Example
+
+\begin{example}%
+\exmp{% input
+5 2
+1 2
+1 3
+5 1
+1 2
+}{% output
+NO
+}%
+\end{example}
+\includegraphics{static/fig1.png}%
+\includegraphics{static/fig2.png}
+
+\end{problem}

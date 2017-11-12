@@ -3,6 +3,9 @@
 #include <lightex/workspace.h>
 #include <lightex/ast/ast.h>
 
+extern const char LIGHTEX_STY_DATA[];
+extern const size_t LIGHTEX_STY_LENGTH;
+
 namespace lightex {
   namespace extension {
     Result Context::Execute(const std::string& texInput) {
@@ -29,7 +32,13 @@ namespace lightex {
     }
     
     std::unique_ptr<Context> Module::CreateContext(bool) const {
-      return std::make_unique<Context>();
+      auto ctxt = std::make_unique<Context>();
+
+      // TODO: do once per all contexts
+      const std::string lightex_sty{ LIGHTEX_STY_DATA, LIGHTEX_STY_LENGTH };
+      ctxt->Execute(lightex_sty);
+
+      return ctxt;
     }
   } // namespace extension
 } // namespace lightex

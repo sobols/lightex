@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>spanning-tree</title>
+    <link rel="stylesheet" type="text/css" href="static/lightex.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha1/katex.min.css" integrity="sha384-8QOKbPtTFvh/lMY0qPVbXj9hDh+v8US0pD//FcoYFst2lCIf0BmT58+Heqj0IGyx" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha1/katex.min.js" integrity="sha384-GR8SEkOO1rBN/jnOcQDFcFmwXAevSLx7/Io9Ps1rkxWp983ZIuUGfxivlF/5f5eJ" crossorigin="anonymous"></script>
+
+    </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="problem-statement">
+   <p> Задан неориентированный граф без петель и кратных ребер.</p><p>Требуется построить какое-либо остовное дерево этого графа или сообщить, что его не существует.</p><h3>Формат входного файла</h3> В первой строке входного файла записано целое число <span id="mathTextSpan1"></span><script type="text/javascript">katex.render("N", document.getElementById("mathTextSpan1"), {displayMode: false});</script>&nbsp;&mdash; количество вершин в графе (<span id="mathTextSpan2"></span><script type="text/javascript">katex.render("1 \u005cle N \u005cle 100", document.getElementById("mathTextSpan2"), {displayMode: false});</script>). Далее записана матрица смежности графа: <span id="mathTextSpan3"></span><script type="text/javascript">katex.render("N", document.getElementById("mathTextSpan3"), {displayMode: false});</script> строк по <span id="mathTextSpan4"></span><script type="text/javascript">katex.render("N", document.getElementById("mathTextSpan4"), {displayMode: false});</script> чисел, каждое из которых&nbsp;&mdash; <span id="mathTextSpan5"></span><script type="text/javascript">katex.render("0", document.getElementById("mathTextSpan5"), {displayMode: false});</script> или <span id="mathTextSpan6"></span><script type="text/javascript">katex.render("1", document.getElementById("mathTextSpan6"), {displayMode: false});</script>. Числа разделяются одиночными пробелами. Гарантируется, что матрица симметрическая, все элементы на главной диагонали нулевые.<h3>Формат выходного файла</h3> Если остовное дерево построить невозможно, выведите одно число <span id="mathTextSpan7"></span><script type="text/javascript">katex.render("-1", document.getElementById("mathTextSpan7"), {displayMode: false});</script>. Иначе в первой строке выведите число <span id="mathTextSpan8"></span><script type="text/javascript">katex.render("M", document.getElementById("mathTextSpan8"), {displayMode: false});</script>&nbsp;&mdash; количество рёбер в остовном дереве, в последующих <span id="mathTextSpan9"></span><script type="text/javascript">katex.render("M", document.getElementById("mathTextSpan9"), {displayMode: false});</script> строках напечатайте сами рёбра, т.&nbsp;е. укажите для каждого ребра пару вершин, которые это ребро соединяет. Вершины графа нумеруются числами <span id="mathTextSpan10"></span><script type="text/javascript">katex.render("1", document.getElementById("mathTextSpan10"), {displayMode: false});</script>, <span id="mathTextSpan11"></span><script type="text/javascript">katex.render("2", document.getElementById("mathTextSpan11"), {displayMode: false});</script>, ..., <span id="mathTextSpan12"></span><script type="text/javascript">katex.render("N", document.getElementById("mathTextSpan12"), {displayMode: false});</script>. Порядок вывода рёбер значения не имеет. Если остовных деревьев несколько, выведите любое.<h3>Примеры</h3>   <table class="inputs-outputs">  <tr>  <th>  стандартный ввод  </th>  <th>  стандартный вывод  </th>  </tr>       <tr>  <td>3
+0 1 0
+1 0 1
+0 1 0
+</td>  <td>2
+1 2
+3 2
+</td>  </tr>        <tr>  <td>2
+0 0
+0 0
+</td>  <td>-1
+</td>  </tr>      </table>    
+      </div>
+    </div>
+  </body>
+</html>

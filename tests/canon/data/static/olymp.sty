@@ -1,0 +1,66 @@
+\newenvironment{problem}[6]{
+    \newenvironment{example}{
+        \newcommand{\exmp}[2]{
+            \nparagraph{
+                \unescaped{<tr>}
+                    \unescaped{<td>#1</td>}
+                    \unescaped{<td>#2</td>}
+                \unescaped{</tr>}
+            }
+        }
+
+        \unescaped{<table class="inputs-outputs">}
+            \unescaped{<tr>}
+                \unescaped{<th>}
+                ##2
+                \unescaped{</th>}
+                \unescaped{<th>}
+                ##3
+                \unescaped{</th>}
+            \unescaped{</tr>}
+    }{
+        \unescaped{</table>}
+    }%
+    \section{\ProblemTitle#1}%
+    \unescaped{<div class="infos">}
+        Имя входного файла: \texttt{#2}.\\
+        Имя выходного файла: \texttt{#3}.\\
+        Ограничение по времени: \texttt{#4}.\\
+        Ограничение по памяти: \texttt{#5}.
+    \unescaped{</div>}
+}{
+}
+
+\newenvironment{rawproblem}[2]{
+    \newenvironment{example}{
+        \newcommand{\exmp}[2]{
+            \nparagraph{
+                \unescaped{<tr>}
+                    \unescaped{<td>#1</td>}
+                    \unescaped{<td>#2</td>}
+                \unescaped{</tr>}
+            }
+        }
+
+        \unescaped{<table class="inputs-outputs">}
+            \unescaped{<tr>}
+                \unescaped{<th>}
+                ##1
+                \unescaped{</th>}
+                \unescaped{<th>}
+                ##2
+                \unescaped{</th>}
+            \unescaped{</tr>}
+    }{
+        \unescaped{</table>}
+    }
+}{
+}
+
+\newcommand{\ProblemTitle}{}
+\newcommand{\InputFile}{\subsection{Формат входного файла}}
+\newcommand{\OutputFile}{\subsection{Формат выходного файла}}
+\newcommand{\Example}{\subsection{Пример}}
+\newcommand{\Examples}{\subsection{Примеры}}
+\newcommand{\Note}{\subsection{\textit{Замечание}}}
+\newcommand{\Notes}{\subsection{\textit{Замечания}}}

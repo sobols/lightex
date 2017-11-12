@@ -57,7 +57,7 @@ if(PYTHONLIBS_FOUND)
 		${lightex_root}/lightex/pymod/pylightex.cc
 		${lightex_root}/lightex/pymod/pylightex.h
 	)
-    target_link_libraries(pylightex lightex ${PYTHON_LIBRARIES})
+    target_link_libraries(pylightex lightex styles ${PYTHON_LIBRARIES})
     if(WIN32)
         set_target_properties(pylightex PROPERTIES SUFFIX ".pyd")
     endif(WIN32)
