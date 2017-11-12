@@ -22,10 +22,8 @@ script:
   - cd boost_1_65_1
   - ./bootstrap.sh --with-libraries=filesystem,test --prefix="${HOME}/local"
   - ./b2 -d0 install
-  - cd
-  - mkdir -p build
-  - cd build
+  - cd && mkdir build && cd build
   - cmake -DBoost_NO_SYSTEM_PATHS=1 -DBOOST_ROOT="${HOME}/local" "${TRAVIS_BUILD_DIR}"
   - make
   - ./tester
-  - python "${TRAVIS_BUILD_DIR}/tests/canon/run.py"
+  - PYTHONPATH=. python "${TRAVIS_BUILD_DIR}/tests/canon/run.py"
