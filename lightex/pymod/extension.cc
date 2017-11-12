@@ -2,6 +2,7 @@
 
 #include <lightex/workspace.h>
 #include <lightex/ast/ast.h>
+#include <lightex/utils/utf32.h>
 
 extern const char LIGHTEX_STY_DATA[];
 extern const size_t LIGHTEX_STY_LENGTH;
@@ -26,7 +27,7 @@ namespace lightex {
 
       visitor_ = std::move(visitor_copy);
 
-      result.html = html_result.escaped;
+      result.html = ConvertToUTF8(html_result.escaped);
       result.ok = true;
       return result;
     }

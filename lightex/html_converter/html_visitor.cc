@@ -73,14 +73,15 @@ std::u32string EscapeStringForHtml(const std::u32string& unescaped) {
 std::u32string EscapeStringForJs(const std::u32string& unescaped) {
   std::u32string buffer;
 
-  //for (char32_t c : unescaped) {
-  //  if (c == '"' || c == '\\' || ('\x00' <= c && c <= '\x1f')) {
-  //    buffer << "\\u" << std::hex << std::setw(4) << std::setfill('0') << int{c};
-  //  } else {
-  //    buffer << c;
-  //  }
-  //}
-  buffer = unescaped;
+  for (char32_t c : unescaped) {
+    if (c == '"' || c == '\\' || ('\x00' <= c && c <= '\x1f')) {
+      std::ostringstream oss;
+      oss << "\\u" << std::hex << std::setw(4) << std::setfill('0') << uint32_t{c};
+      buffer += ConvertToUTF32(oss.str());
+    } else {
+      buffer += c;
+    }
+  }
   return buffer;
 }
 

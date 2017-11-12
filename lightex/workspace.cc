@@ -30,7 +30,7 @@ bool ParseProgramToAst(const std::string& input, std::string* error_message, ast
 
   if (!x3::phrase_parse(iter, end, grammar::program, x3::unicode::space, *output) || iter != end) {
     if (error_message) {
-      std::size_t failed_at = 0; // iter - start;
+      std::size_t failed_at = std::distance(begin, iter);
       *error_message = kSyntaxParsingError;
       *error_message = input.substr(failed_at, failed_at + kFailedSnippetLength);
       if (failed_at + kFailedSnippetLength + 1 < input.size()) {
