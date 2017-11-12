@@ -84,7 +84,7 @@ struct Program : x3::position_tagged {
 };
 
 struct PlainText : x3::position_tagged {
-  std::string text;
+  std::u32string text;
 };
 
 struct Paragraph : x3::position_tagged {
@@ -106,22 +106,22 @@ struct OuterArgumentRef : x3::position_tagged {
 };
 
 struct InlinedMathText : x3::position_tagged {
-  std::string text;
+  std::u32string text;
 };
 
 struct MathText : x3::position_tagged {
-  std::string text;
+  std::u32string text;
 };
 
 struct CommandMacro : x3::position_tagged {
-  std::string name;
+  std::u32string name;
   boost::optional<int> arguments_num;
   std::list<Argument> default_arguments;
   Argument body;
 };
 
 struct EnvironmentMacro : x3::position_tagged {
-  std::string name;
+  std::u32string name;
   boost::optional<int> arguments_num;
   std::list<Argument> default_arguments;
   Program pre_program;
@@ -129,7 +129,7 @@ struct EnvironmentMacro : x3::position_tagged {
 };
 
 struct Command : x3::position_tagged {
-  std::string name;
+  std::u32string name;
   std::list<Argument> default_arguments;
   std::list<Argument> arguments;
 };
@@ -143,15 +143,15 @@ struct NparagraphCommand : x3::position_tagged {
 };
 
 struct Environment : x3::position_tagged {
-  std::string name;
+  std::u32string name;
   std::list<Argument> default_arguments;
   std::list<Argument> arguments;
   Program program;
-  std::string end_name;
+  std::u32string end_name;
 };
 
 struct VerbatimEnvironment : x3::position_tagged {
-  std::string content;
+  std::u32string content;
 };
 }  // namespace ast
 }  // namespace lightex

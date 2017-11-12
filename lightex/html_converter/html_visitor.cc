@@ -1,5 +1,9 @@
 #include <lightex/html_converter/html_visitor.h>
 
+#include <lightex/utils/utf32.h>
+
+#include <boost/spirit/home/support/char_encoding/unicode.hpp>
+
 #include <cctype>
 #include <list>
 #include <iomanip>
@@ -11,112 +15,119 @@ namespace lightex {
 namespace html_converter {
 namespace {
 
-const std::map<std::string, std::string> kLookupTableSymbols = {
-    {"\\,", "&thinsp;"}, {"~", "&nbsp;"}, {"---", "&mdash;"}, {"--", "&ndash;"}, {"<<", "&laquo;"}, {">>", "&raquo;"}};
+const std::map<std::u32string, std::u32string> kLookupTableSymbols = {
+    {U"\\,", U"&thinsp;"}, {U"~", U"&nbsp;"}, {U"---", U"&mdash;"}, {U"--", U"&ndash;"}, {U"<<", U"&laquo;"}, {U">>", U"&raquo;"}};
 
-std::string FormatText(const std::string& unformatted) {
-  std::ostringstream buffer;
+std::u32string FormatText(const std::u32string& unformatted) {
+  std::u32string buffer;
 
   bool previous_is_space = false;
-  for (char c : unformatted) {
-    if (std::isspace(c)) {
+  for (char32_t c : unformatted) {
+    if (boost::spirit::char_encoding::unicode::isspace(c)) {
       if (!previous_is_space) {
-        buffer << ' ';
+        buffer += ' ';
       }
       previous_is_space = true;
       continue;
     }
 
-    buffer << c;
+    buffer += c;
     previous_is_space = false;
   }
 
-  return buffer.str();
+  return buffer;
 }
 
-std::string EscapeStringForHtml(const std::string& unescaped) {
-  std::ostringstream buffer;
-
-  for (char c : unescaped) {
+std::u32string EscapeStringForHtml(const std::u32string& unescaped) {
+  std::u32string buffer;
+  for (char32_t c : unescaped) {
     switch (c) {
       case '&':
-        buffer << "&amp;";
+        buffer += U"&amp;";
         break;
 
       case '\"':
-        buffer << "&quot;";
+        buffer += U"&quot;";
         break;
 
       case '\'':
-        buffer << "&apos;";
+        buffer += U"&apos;";
         break;
 
       case '<':
-        buffer << "&lt;";
+        buffer += U"&lt;";
         break;
 
       case '>':
-        buffer << "&gt;";
+        buffer += U"&gt;";
         break;
 
       default:
-        buffer << c;
+        buffer += c;
     }
   }
 
-  return buffer.str();
+  return buffer;
 }
 
-std::string EscapeStringForJs(const std::string& unescaped) {
-  std::ostringstream buffer;
+std::u32string EscapeStringForJs(const std::u32string& unescaped) {
+  std::u32string buffer;
 
-  for (char c : unescaped) {
-    if (c == '"' || c == '\\' || ('\x00' <= c && c <= '\x1f')) {
-      buffer << "\\u" << std::hex << std::setw(4) << std::setfill('0') << int{c};
-    } else {
-      buffer << c;
-    }
-  }
-
-  return buffer.str();
+  //for (char32_t c : unescaped) {
+  //  if (c == '"' || c == '\\' || ('\x00' <= c && c <= '\x1f')) {
+  //    buffer << "\\u" << std::hex << std::setw(4) << std::setfill('0') << int{c};
+  //  } else {
+  //    buffer << c;
+  //  }
+  //}
+  buffer = unescaped;
+  return buffer;
 }
 
-std::string EscapeDollarSigns(const std::string& unescaped) {
-  std::ostringstream buffer;
+std::u32string EscapeDollarSigns(const std::u32string& unescaped) {
+  std::u32string buffer;
 
-  for (char c : unescaped) {
+  for (char32_t c : unescaped) {
     switch (c) {
       case '$':
-        buffer << "\\$";
+        buffer += U"\\$";
         break;
 
       default:
-        buffer << c;
+        buffer += c;
     }
   }
 
-  return buffer.str();
+  return buffer;
 }
 
-std::string RenderMathFormula(const std::string& math_text, bool is_inlined, int* math_text_span_num) {
-  std::string span_id = "mathTextSpan" + std::to_string(++(*math_text_span_num));
-  std::string display_mode = is_inlined ? "false" : "true";
+std::u32string RenderMathFormula(const std::u32string& math_text, bool is_inlined, int* math_text_span_num) {
+  std::u32string span_id = U"mathTextSpan" + ConvertToUTF32(std::to_string(++(*math_text_span_num)));
+  std::u32string display_mode = is_inlined ? U"false" : U"true";
 
-  std::ostringstream buffer;
-  buffer << "<span id=\"" << span_id << "\"></span>";
+  std::u32string buffer;
+  buffer += U"<span id=\"";
+  buffer += span_id;
+  buffer += U"\"></span>";
 
-  buffer << "<script type=\"text/javascript\">";
-  buffer << "katex.render(";
-  buffer << "\"" << EscapeStringForJs(EscapeDollarSigns(math_text)) << "\", ";
-  buffer << "document.getElementById(\"" << span_id << "\"), {displayMode: " << display_mode << "});";
-  buffer << "</script>";
+  buffer += U"<script type=\"text/javascript\">";
+  buffer += U"katex.render(";
+  buffer += U"\"";
+  buffer += EscapeStringForJs(EscapeDollarSigns(math_text));
+  buffer += U"\", ";
+  buffer += U"document.getElementById(\"";
+  buffer += span_id;
+  buffer += U"\"), {displayMode: ";
+  buffer += display_mode;
+  buffer += U"});";
+  buffer += U"</script>";
 
-  return buffer.str();
+  return buffer;
 }
 
 template <typename MacroDefinition>
 const MacroDefinition* GetMacroDefinition(const std::list<MacroDefinition>& macro_definitions,
-                                          const std::string& name) {
+                                          const std::u32string& name) {
   for (auto it = macro_definitions.rbegin(); it != macro_definitions.rend(); ++it) {
     if (it->name == name) {
       return &(*it);
@@ -128,10 +139,10 @@ const MacroDefinition* GetMacroDefinition(const std::list<MacroDefinition>& macr
 }  // namespace
 
 Result Result::Failure(const std::string& error_message) {
-  return {false, "", "", error_message, false};
+  return {false, U"", U"", error_message, false};
 }
 
-Result Result::Success(const std::string& escaped, const std::string& unescaped, bool breaks_paragraph) {
+Result Result::Success(const std::u32string& escaped, const std::u32string& unescaped, bool breaks_paragraph) {
   return {true, escaped, unescaped, "", breaks_paragraph};
 }
 
@@ -142,7 +153,7 @@ Result HtmlVisitor::operator()(const ast::Program& program) {
 Result HtmlVisitor::operator()(const ast::PlainText& plain_text) {
   const auto it = kLookupTableSymbols.find(plain_text.text);
   if (it != kLookupTableSymbols.end()) {
-    return Result::Success(it->second, it->second);
+    return Result::Success(it->second, it->first);
   }
 
   return Result::Success(EscapeStringForHtml(FormatText(plain_text.text)), plain_text.text);
@@ -154,21 +165,21 @@ Result HtmlVisitor::operator()(const ast::Paragraph& paragraph) {
     return result;
   }
 
-  std::string formatted_result = FormatText(result.escaped);
-  if (formatted_result.empty() || formatted_result == " ") {
+  std::u32string formatted_result = FormatText(result.escaped);
+  if (formatted_result.empty() || formatted_result == U" ") {
     return result;
   }
 
   if (active_environment_definitions_num_ == 0 && !result.breaks_paragraph) {
-    result.escaped = "<p>" + result.escaped + "</p>";
-    result.unescaped = "<p>" + result.unescaped + "</p>";
+    result.escaped = U"<p>" + result.escaped + U"</p>";
+    result.unescaped = U"<p>" + result.unescaped + U"</p>";
   }
 
   return result;
 }
 
 Result HtmlVisitor::operator()(const ast::ParagraphBreaker& paragraph_breaker) {
-  return Result::Success("", "");
+  return Result::Success(U"", U"");
 }
 
 Result HtmlVisitor::operator()(const ast::Argument& argument) {
@@ -194,37 +205,37 @@ Result HtmlVisitor::operator()(const ast::OuterArgumentRef& outer_argument_ref) 
 }
 
 Result HtmlVisitor::operator()(const ast::InlinedMathText& math_text) {
-  std::string render_result = RenderMathFormula(math_text.text, true, &math_text_span_num_);
+  std::u32string render_result = RenderMathFormula(math_text.text, true, &math_text_span_num_);
   return Result::Success(render_result, render_result);
 }
 
 Result HtmlVisitor::operator()(const ast::MathText& math_text) {
-  std::string render_result = RenderMathFormula(math_text.text, false, &math_text_span_num_);
+  std::u32string render_result = RenderMathFormula(math_text.text, false, &math_text_span_num_);
   return Result::Success(render_result, render_result);
 }
 
 Result HtmlVisitor::operator()(const ast::CommandMacro& command_macro) {
   if (command_macro.arguments_num.get_value_or(0) < command_macro.default_arguments.size()) {
-    return Result::Failure("Invalid number of arguments for command macro " + command_macro.name + ".");
+    return Result::Failure("Invalid number of arguments for command macro " + ConvertToUTF8(command_macro.name) + ".");
   }
 
   defined_command_macros_.push_back(command_macro);
-  return Result::Success("", "");
+  return Result::Success(U"", U"");
 }
 
 Result HtmlVisitor::operator()(const ast::EnvironmentMacro& environment_macro) {
   if (environment_macro.arguments_num.get_value_or(0) < environment_macro.default_arguments.size()) {
-    return Result::Failure("Invalid number of arguments for environment macro " + environment_macro.name + ".");
+    return Result::Failure("Invalid number of arguments for environment macro " + ConvertToUTF8(environment_macro.name) + ".");
   }
 
   defined_environment_macros_.push_back(environment_macro);
-  return Result::Success("", "");
+  return Result::Success(U"", U"");
 }
 
 Result HtmlVisitor::operator()(const ast::Command& command) {
   const ast::CommandMacro* command_macro_ptr = GetDefinedCommandMacro(command.name);
   if (!command_macro_ptr) {
-    return Result::Failure("Command macro " + command.name + " is not defined yet.");
+    return Result::Failure("Command macro " + ConvertToUTF8(command.name) + " is not defined yet.");
   }
 
   std::vector<Result> args;
@@ -262,13 +273,13 @@ Result HtmlVisitor::operator()(const ast::NparagraphCommand& nparagraph_command)
 
 Result HtmlVisitor::operator()(const ast::Environment& environment) {
   if (environment.name != environment.end_name) {
-    return Result::Failure("Environment name doesn't match the end name: " + environment.name + " != " +
-                           environment.end_name);
+    return Result::Failure("Environment name doesn't match the end name: " + ConvertToUTF8(environment.name) + " != " +
+                           ConvertToUTF8(environment.end_name));
   }
 
   const ast::EnvironmentMacro* environment_macro_ptr = GetDefinedEnvironmentMacro(environment.name);
   if (!environment_macro_ptr) {
-    return Result::Failure("Environment macro " + environment.name + " is not defined yet.");
+    return Result::Failure("Environment macro " + ConvertToUTF8(environment.name) + " is not defined yet.");
   }
 
   std::vector<Result> args;
@@ -289,8 +300,8 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
 
   arguments_stack_.push_back(std::move(args));
 
-  std::string escaped;
-  std::string unescaped;
+  std::u32string escaped;
+  std::u32string unescaped;
   bool breaks_paragraph;
 
   active_environment_definitions_num_ += 1;
@@ -330,15 +341,15 @@ Result HtmlVisitor::operator()(const ast::Environment& environment) {
 }
 
 Result HtmlVisitor::operator()(const ast::VerbatimEnvironment& verbatim_environment) {
-  std::string html_text = "<pre>" + verbatim_environment.content + "</pre>";
+  std::u32string html_text = U"<pre>" + EscapeStringForHtml(verbatim_environment.content) + U"</pre>";
 
-  return Result::Success(html_text, html_text);
+  return Result::Success(html_text, verbatim_environment.content);
 }
 
 template <typename Node>
 Result HtmlVisitor::JoinNodeResults(const std::list<Node>& nodes) {
-  std::ostringstream escaped;
-  std::ostringstream unescaped;
+  std::u32string escaped;
+  std::u32string unescaped;
 
   bool breaks_paragraph = false;
   for (const auto& node : nodes) {
@@ -347,12 +358,12 @@ Result HtmlVisitor::JoinNodeResults(const std::list<Node>& nodes) {
       return child_result;
     }
 
-    escaped << child_result.escaped;
-    unescaped << child_result.unescaped;
+    escaped += child_result.escaped;
+    unescaped += child_result.unescaped;
     breaks_paragraph |= child_result.breaks_paragraph;
   }
 
-  return Result::Success(escaped.str(), unescaped.str(), breaks_paragraph);
+  return Result::Success(escaped, unescaped, breaks_paragraph);
 };
 
 template <typename Macro, typename MacroDefinition>
@@ -366,7 +377,7 @@ Result HtmlVisitor::PrepareMacroArguments(const Macro& macro,
   int default_args_num = macro_definition.default_arguments.size();
   int redefined_default_args_num = macro.default_arguments.size();
   if (redefined_default_args_num > default_args_num) {
-    return Result::Failure("Macro " + macro.name + " has more default arguments than it's been defined. " +
+    return Result::Failure("Macro " + ConvertToUTF8(macro.name) + " has more default arguments than it's been defined. " +
                            "Expected " + std::to_string(default_args_num) + ", got " +
                            std::to_string(redefined_default_args_num) + ".");
   }
@@ -374,7 +385,7 @@ Result HtmlVisitor::PrepareMacroArguments(const Macro& macro,
   int args_num = macro_definition.default_arguments.size() + macro.arguments.size();
   int expected_args_num = macro_definition.arguments_num.get_value_or(0);
   if (args_num != expected_args_num) {
-    return Result::Failure("Macro " + macro.name + " has invalid number of arguments. " + "Expected " +
+    return Result::Failure("Macro " + ConvertToUTF8(macro.name) + " has invalid number of arguments. " + "Expected " +
                            std::to_string(expected_args_num) + ", got " + std::to_string(args_num) + ".");
   }
 
@@ -402,14 +413,14 @@ Result HtmlVisitor::PrepareMacroArguments(const Macro& macro,
     output_args->at(i) = std::move(child_result);
   }
 
-  return Result::Success("", "");
+  return Result::Success(U"", U"");
 }
 
-const ast::CommandMacro* HtmlVisitor::GetDefinedCommandMacro(const std::string& name) const {
+const ast::CommandMacro* HtmlVisitor::GetDefinedCommandMacro(const std::u32string& name) const {
   return GetMacroDefinition(defined_command_macros_, name);
 }
 
-const ast::EnvironmentMacro* HtmlVisitor::GetDefinedEnvironmentMacro(const std::string& name) const {
+const ast::EnvironmentMacro* HtmlVisitor::GetDefinedEnvironmentMacro(const std::u32string& name) const {
   return GetMacroDefinition(defined_environment_macros_, name);
 }
 

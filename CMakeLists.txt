@@ -7,6 +7,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+add_definitions(-DBOOST_SPIRIT_UNICODE)
+add_definitions(-DBOOST_SPIRIT_X3_UNICODE)
+
 add_subdirectory(lightex/styles)
 
 # Define lightex_root variable
@@ -26,6 +29,8 @@ set(lightex_src_files ${lightex_src_files}
     ${lightex_root}/lightex/html_converter/html_visitor.h
     ${lightex_root}/lightex/utils/file_utils.cc
     ${lightex_root}/lightex/utils/file_utils.h
+	${lightex_root}/lightex/utils/utf32.cc
+    ${lightex_root}/lightex/utils/utf32.h
 )
 add_library(lightex STATIC ${lightex_src_files})
 

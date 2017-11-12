@@ -10,7 +10,7 @@
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Program, (std::list<lightex::ast::ProgramNode>, nodes))
 
-BOOST_FUSION_ADAPT_STRUCT(lightex::ast::PlainText, (std::string, text))
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::PlainText, (std::u32string, text))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Paragraph, (std::list<lightex::ast::ParagraphNode>, nodes))
 
@@ -22,25 +22,25 @@ BOOST_FUSION_ADAPT_STRUCT(lightex::ast::ArgumentRef, (int, argument_id))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::OuterArgumentRef, (int, argument_id))
 
-BOOST_FUSION_ADAPT_STRUCT(lightex::ast::InlinedMathText, (std::string, text))
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::InlinedMathText, (std::u32string, text))
 
-BOOST_FUSION_ADAPT_STRUCT(lightex::ast::MathText, (std::string, text))
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::MathText, (std::u32string, text))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::CommandMacro,
-                          (std::string, name),
+                          (std::u32string, name),
                           (boost::optional<int>, arguments_num),
                           (std::list<lightex::ast::Argument>, default_arguments),
                           (lightex::ast::Argument, body))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::EnvironmentMacro,
-                          (std::string, name),
+                          (std::u32string, name),
                           (boost::optional<int>, arguments_num),
                           (std::list<lightex::ast::Argument>, default_arguments),
                           (lightex::ast::Program, pre_program),
                           (lightex::ast::Program, post_program))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Command,
-                          (std::string, name),
+                          (std::u32string, name),
                           (std::list<lightex::ast::Argument>, default_arguments),
                           (std::list<lightex::ast::Argument>, arguments))
 
@@ -49,10 +49,10 @@ BOOST_FUSION_ADAPT_STRUCT(lightex::ast::UnescapedCommand, (lightex::ast::Argumen
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::NparagraphCommand, (lightex::ast::Argument, body))
 
 BOOST_FUSION_ADAPT_STRUCT(lightex::ast::Environment,
-                          (std::string, name),
+                          (std::u32string, name),
                           (std::list<lightex::ast::Argument>, default_arguments),
                           (std::list<lightex::ast::Argument>, arguments),
                           (lightex::ast::Program, program),
-                          (std::string, end_name))
+                          (std::u32string, end_name))
 
-BOOST_FUSION_ADAPT_STRUCT(lightex::ast::VerbatimEnvironment, (std::string, content))
+BOOST_FUSION_ADAPT_STRUCT(lightex::ast::VerbatimEnvironment, (std::u32string, content))

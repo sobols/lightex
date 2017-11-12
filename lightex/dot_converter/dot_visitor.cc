@@ -1,12 +1,14 @@
 #include <lightex/dot_converter/dot_visitor.h>
 
+#include <lightex/utils/utf32.h>
+
 namespace lightex {
 namespace dot_converter {
 namespace {
 
-std::string EscapeForDot(const std::string& s) {
+std::string EscapeForDot(const std::u32string& s) {
   std::string result;
-  for (char c : s) {
+  for (char32_t c : s) {
     switch (c) {
       case '\\': {
         result += '\\';
@@ -107,7 +109,7 @@ NodeId DotVisitor::operator()(const ast::MathText& math_text) {
 
 NodeId DotVisitor::operator()(const ast::CommandMacro& command_macro) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"COMMAND_MACRO = <name=" + command_macro.name);
+  AppendToOutput("  " + node_id + " [label=\"COMMAND_MACRO = <name=" + ConvertToUTF8(command_macro.name));
   AppendToOutput(" argument=");
   AppendToOutput(std::to_string(command_macro.arguments_num.value_or(0)));
   AppendToOutput(">\"];\n");
@@ -125,7 +127,7 @@ NodeId DotVisitor::operator()(const ast::CommandMacro& command_macro) {
 
 NodeId DotVisitor::operator()(const ast::EnvironmentMacro& environment_macro) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT_MACRO = <name=" + environment_macro.name);
+  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT_MACRO = <name=" + ConvertToUTF8(environment_macro.name));
   AppendToOutput(" argument=");
   AppendToOutput(std::to_string(environment_macro.arguments_num.value_or(0)));
   AppendToOutput(">\"];\n");
@@ -146,7 +148,7 @@ NodeId DotVisitor::operator()(const ast::EnvironmentMacro& environment_macro) {
 
 NodeId DotVisitor::operator()(const ast::Command& command) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"COMMAND = <name=" + command.name + ">\"];\n");
+  AppendToOutput("  " + node_id + " [label=\"COMMAND = <name=" + ConvertToUTF8(command.name) + ">\"];\n");
 
   for (const auto& argument : command.default_arguments) {
     NodeId child_id = (*this)(argument);
@@ -183,8 +185,8 @@ NodeId DotVisitor::operator()(const ast::NparagraphCommand& nparagraph_command) 
 
 NodeId DotVisitor::operator()(const ast::Environment& environment) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT = <name=" + environment.name);
-  AppendToOutput(" end_name=" + environment.end_name + ">\"];\n");
+  AppendToOutput("  " + node_id + " [label=\"ENVIRONMENT = <name=" + ConvertToUTF8(environment.name));
+  AppendToOutput(" end_name=" + ConvertToUTF8(environment.end_name) + ">\"];\n");
 
   for (const auto& argument : environment.default_arguments) {
     NodeId child_id = (*this)(argument);
@@ -204,7 +206,7 @@ NodeId DotVisitor::operator()(const ast::Environment& environment) {
 
 NodeId DotVisitor::operator()(const ast::VerbatimEnvironment& verbatim_environment) {
   NodeId node_id = GenerateNodeId();
-  AppendToOutput("  " + node_id + " [label=\"VERBATIM_ENVIRONMENT\" content=\"" + verbatim_environment.content +
+  AppendToOutput("  " + node_id + " [label=\"VERBATIM_ENVIRONMENT\" content=\"" + ConvertToUTF8(verbatim_environment.content) +
                  "\"];\n");
 
   return node_id;

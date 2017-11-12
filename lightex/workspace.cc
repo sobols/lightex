@@ -8,8 +8,10 @@
 #include <lightex/html_converter/html_visitor.h>
 #include <lightex/grammar/grammar.h>
 #include <lightex/utils/file_utils.h>
+#include <lightex/utils/utf32.h>
 
 #include <boost/spirit/home/x3.hpp>
+#include <boost/regex/pending/unicode_iterator.hpp>
 
 namespace x3 = boost::spirit::x3;
 
@@ -23,12 +25,12 @@ bool ParseProgramToAst(const std::string& input, std::string* error_message, ast
     return false;
   }
 
-  std::string::const_iterator start = input.begin();
-  std::string::const_iterator iter = start;
-  std::string::const_iterator end = input.end();
-  if (!x3::phrase_parse(iter, end, grammar::program, x3::space, *output) || iter < end) {
+  const boost::u8_to_u32_iterator<std::string::const_iterator> begin(input.begin()), end(input.end());
+  auto iter = begin;
+
+  if (!x3::phrase_parse(iter, end, grammar::program, x3::unicode::space, *output) || iter != end) {
     if (error_message) {
-      std::size_t failed_at = iter - start;
+      std::size_t failed_at = 0; // iter - start;
       *error_message = kSyntaxParsingError;
       *error_message = input.substr(failed_at, failed_at + kFailedSnippetLength);
       if (failed_at + kFailedSnippetLength + 1 < input.size()) {
@@ -110,7 +112,7 @@ class HtmlWorkspace : public Workspace {
     }
 
     if (output) {
-      *output = result.escaped;
+      *output = ConvertToUTF8(result.escaped);
     }
     return true;
   }

@@ -13,14 +13,14 @@ namespace html_converter {
 struct Result {
   bool is_successful;
 
-  std::string escaped;
-  std::string unescaped;
+  std::u32string escaped;
+  std::u32string unescaped;
   std::string error_message;
 
   bool breaks_paragraph;
 
   static Result Failure(const std::string& error_message);
-  static Result Success(const std::string& escaped, const std::string& unescaped, bool breaks_paragraph = false);
+  static Result Success(const std::u32string& escaped, const std::u32string& unescaped, bool breaks_paragraph = false);
 };
 
 class HtmlVisitor : public boost::static_visitor<Result> {
@@ -53,8 +53,8 @@ class HtmlVisitor : public boost::static_visitor<Result> {
                                const MacroDefinition& macro_definition,
                                std::vector<Result>* output_args);
 
-  const ast::CommandMacro* GetDefinedCommandMacro(const std::string& name) const;
-  const ast::EnvironmentMacro* GetDefinedEnvironmentMacro(const std::string& name) const;
+  const ast::CommandMacro* GetDefinedCommandMacro(const std::u32string& name) const;
+  const ast::EnvironmentMacro* GetDefinedEnvironmentMacro(const std::u32string& name) const;
   const Result* GetArgumentByReference(int index, bool is_outer) const;
 
   int active_environment_definitions_num_ = 0;

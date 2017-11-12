@@ -33,16 +33,16 @@ x3::rule<class NparagraphCommandId, ast::NparagraphCommand> nparagraph_command =
 x3::rule<class EnvironmentId, ast::Environment> environment = "environment";
 x3::rule<class VerbatimEnvironmentId, ast::VerbatimEnvironment> verbatim_environment = "verbatim_environment";
 
-const auto special_symbol = x3::char_("\\{}$&#^_%~[]");
+const auto special_symbol = x3::unicode::char_("\\{}$&#^_%~[]");
 const auto control_symbol = x3::lexeme['\\' >> special_symbol];
-const auto unicode_symbol = x3::lexeme[x3::char_('&') >> +x3::alpha >> x3::char_(';')];
+const auto unicode_symbol = x3::lexeme[x3::char_('&') >> +x3::unicode::alpha >> x3::char_(';')];
 const auto special_command_identifier =
     x3::lit("begin") | "end" | "newcommand" | "newenvironment" | "unescaped" | "nparagraph";
-const auto command_identifier = x3::lexeme['\\' >> (+x3::alpha - special_command_identifier)];
-const auto math_text_symbol = x3::lexeme[x3::lit('\\') >> x3::char_('$')] | (x3::char_ - x3::char_('$'));
+const auto command_identifier = x3::lexeme['\\' >> (+x3::unicode::alpha - special_command_identifier)];
+const auto math_text_symbol = x3::lexeme[x3::lit('\\') >> x3::unicode::char_('$')] | (x3::char_ - x3::char_('$'));
 const auto environment_identifier = x3::lexeme[+x3::alpha] - "verbatim";
-const auto plain_text_symbol = control_symbol | (x3::char_ - special_symbol - x3::lit('\n'));
-const auto comment = x3::omit[x3::no_skip[x3::lit('%') >> *(x3::char_ - '\n') >> (x3::eol | x3::eoi)]];
+const auto plain_text_symbol = control_symbol | (x3::unicode::char_ - special_symbol - x3::lit('\n'));
+const auto comment = x3::omit[x3::no_skip[x3::lit('%') >> *(x3::unicode::char_ - '\n') >> (x3::eol | x3::eoi)]];
 const auto lookup_table_symbol =
     x3::string("\\,") | x3::string("~") | x3::string("---") | x3::string("--") | x3::string("<<") | x3::string(">>");
 
@@ -50,8 +50,8 @@ const auto program_node_def = paragraph_breaker | paragraph | math_text | enviro
                               command_macro | environment_macro | argument_ref | outer_argument_ref | comment;
 
 const auto plain_text_def = x3::no_skip[lookup_table_symbol | unicode_symbol | x3::string("\n") |
-                                        (+(-x3::char_('\n') >> (&(!lookup_table_symbol) >> plain_text_symbol)) >>
-                                         -(&(!paragraph_breaker) >> x3::char_('\n')))];
+                                        (+(-x3::unicode::char_('\n') >> (&(!lookup_table_symbol) >> plain_text_symbol)) >>
+                                         -(&(!paragraph_breaker) >> x3::unicode::char_('\n')))];
 
 const auto paragraph_node_def = &(!paragraph_breaker) >>
                                 (plain_text | inlined_math_text | command | unescaped_command | nparagraph_command |
@@ -93,7 +93,7 @@ const auto environment_def = x3::lit("\\begin") >> '{' >> environment_identifier
                              *('{' >> argument >> '}') >> program >> "\\end" >> '{' >> environment_identifier >> '}';
 
 const auto verbatim_environment_def = x3::lit("\\begin") >> '{' >> "verbatim" >> '}' >>
-                                      x3::no_skip[*(x3::char_ - '\\')] >> "\\end" >> '{' >> "verbatim" >> '}';
+                                      x3::no_skip[*(x3::unicode::char_ - '\\')] >> "\\end" >> '{' >> "verbatim" >> '}';
 
 BOOST_SPIRIT_DEFINE(program_node)
 BOOST_SPIRIT_DEFINE(paragraph_node)
