@@ -26,4 +26,4 @@ script:
   - cmake -DBoost_NO_SYSTEM_PATHS=1 -DBOOST_ROOT="${HOME}/local" "${TRAVIS_BUILD_DIR}"
   - make
   - ./tester
-  - PYTHONPATH=. python "${TRAVIS_BUILD_DIR}/tests/canon/run.py"
+  - PYTHONPATH=. python3 "${TRAVIS_BUILD_DIR}/tests/canon/run.py"
