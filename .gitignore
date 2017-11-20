@@ -3,5 +3,5 @@ build/
 *.pyd
 /.vs
 /CMakeSettings.json
-/tests/canon/data/*.log
-/tests/canon/data/*.output.html
+*.log
+*.output.html

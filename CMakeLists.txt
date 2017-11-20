@@ -19,18 +19,10 @@ get_filename_component(lightex_root . ABSOLUTE)
 include_directories(${lightex_root})
 set(lightex_src_files ${lightex_src_files}
     ${lightex_root}/lightex/workspace.cc
-    ${lightex_root}/lightex/workspace.h
-    ${lightex_root}/lightex/ast/ast.h
-    ${lightex_root}/lightex/ast/ast_adapted.h
     ${lightex_root}/lightex/dot_converter/dot_visitor.cc
-    ${lightex_root}/lightex/dot_converter/dot_visitor.h
-    ${lightex_root}/lightex/grammar/grammar.h
     ${lightex_root}/lightex/html_converter/html_visitor.cc
-    ${lightex_root}/lightex/html_converter/html_visitor.h
     ${lightex_root}/lightex/utils/file_utils.cc
-    ${lightex_root}/lightex/utils/file_utils.h
-	${lightex_root}/lightex/utils/utf32.cc
-    ${lightex_root}/lightex/utils/utf32.h
+    ${lightex_root}/lightex/utils/utf32.cc
 )
 add_library(lightex STATIC ${lightex_src_files})
 
@@ -47,7 +39,7 @@ add_executable(parse_program_to_html ${lightex_root}/lightex/binaries/parse_prog
 target_link_libraries(parse_program_to_html lightex styles)
 
 # Unittest
-add_executable(tester ${lightex_root}/tests/main.cc)
+add_executable(tester ${lightex_root}/lightex/tests/main.cc)
 target_link_libraries(tester lightex ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 # Python module
