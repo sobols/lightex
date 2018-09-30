@@ -19,6 +19,8 @@ script:
   - mkdir -p build && cd build
   - cmake "${TRAVIS_BUILD_DIR}"
   - make
-  - cd lightex
+  - cd ${HOME}/build/lightex
   - ./tester
   - PYTHONPATH=. python3 "${TRAVIS_BUILD_DIR}/lightex/tests/canon/run.py"
+  - cd ${HOME}/build/lightex2
+  - ./tester2

@@ -6,19 +6,17 @@
 #include <iomanip>
 
 namespace {
-    std::u16string escapeStringForJs(const std::u16string& unescaped) {
-        std::u16string buffer;
+    std::string EscapeStringForJs(const std::string& unescaped) {
+        std::stringstream buffer;
 
-        for (char16_t c : unescaped) {
+        for (char c : unescaped) {
             if (c == '"' || c == '\\' || ('\x00' <= c && c <= '\x1f')) {
-                std::ostringstream oss;
-                oss << "\\u" << std::hex << std::setw(4) << std::setfill('0') << uint32_t{c};
-                buffer += convertFromUtf8(oss.str());
+                buffer << "\\u" << std::hex << std::setw(4) << std::setfill('0') << static_cast<unsigned int>(c);
             } else {
-                buffer += c;
+                buffer << c;
             }
         }
-        return buffer;
+        return buffer.str();
     }
 
     class KaTeXInBrowserRenderer: public IMathRenderer {
@@ -28,18 +26,17 @@ namespace {
         {
         }
 
-        IMathRenderer::Result render(const std::u16string& expression, Mode mode) override {
-            std::basic_stringstream<char16_t> out;
+        IMathRenderer::Result Render(const std::string& expression, Mode mode) override {
+            std::stringstream out;
             ++counter_;
-            std::u16string id = convertFromUtf8(std::to_string(counter_));
-            out << u"<span id=\"math_" << id << u"\"></span>";
-            out << u"<script type=\"text/javascript\">";
-            out << u"katex.render(";
-            out << u"\"" << escapeStringForJs(expression) << u"\", ";
-            out << u"document.getElementById(\"math_" << id << u"\"), ";
-            out << u"{displayMode: " << (mode == Mode::Display ? u"true" : u"false") << u", throwOnError: false}";
-            out << u")";
-            out << u"</script>";
+            out << "<span id=\"math_" << counter_ << "\"></span>";
+            out << "<script type=\"text/javascript\">";
+            out << "katex.render(";
+            out << "\"" << EscapeStringForJs(expression) << "\", ";
+            out << "document.getElementById(\"math_" << counter_ << "\"), ";
+            out << "{displayMode: " << (mode == Mode::Display ? "true" : "false") << ", throwOnError: false}";
+            out << ")";
+            out << "</script>";
 
             IMathRenderer::Result result;
             result.ok = true;
@@ -52,7 +49,7 @@ namespace {
     };
 }
 
-std::unique_ptr<IMathRenderer> createKaTeXInBrowserRenderer() {
+std::unique_ptr<IMathRenderer> CreateKaTeXInBrowserRenderer() {
     std::unique_ptr<IMathRenderer> ptr;
     ptr.reset(new KaTeXInBrowserRenderer());
     return ptr;
