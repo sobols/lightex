@@ -8,3 +8,4 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_subdirectory(lightex)
 add_subdirectory(contrib)
+add_subdirectory(tools)

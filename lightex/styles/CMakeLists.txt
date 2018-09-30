@@ -1,5 +1,3 @@
-add_executable(rescompiler rescompiler.c)
-
 configure_file(lightex.sty lightex.sty COPYONLY)
 
 add_custom_command(
