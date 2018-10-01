@@ -25,9 +25,14 @@ const x3::rule<class PlainTextId, ast::PlainText> plain_text = "plain_text";
 const x3::rule<class VerbatimTextId, ast::VerbatimText> verbatim_text = "verbatim_text";
 const x3::rule<class ParagraphBreakerId, ast::ParagraphBreaker> paragraph_breaker = "paragraph_breaker";
 const x3::rule<class SymbolId, ast::Symbol> symbol = "symbol";
+const x3::rule<class SingleSymbolId, ast::SingleSymbol> single_symbol = "single_symbol";
 
 const x3::rule<class GroupId, ast::Group> group = "group";
 const x3::rule<class CommentId, ast::Comment> comment = "comment";
+
+// math
+const x3::rule<class InlineMathId, ast::InlineMath> inline_math = "inline_math";
+const x3::rule<class DisplayMathId, ast::DisplayMath> display_math = "display_math";
 
 // text style
 const x3::rule<class BoldId, ast::Bold> bold = "bold";
@@ -60,7 +65,10 @@ const auto no_arg_command_end = x3::omit[(&x3::lit('\\') | &tex_special | &x3::e
 
 const auto flow_element_def = paragraph | paragraph_breaker | example_table;
 
-const auto phrasing_element_def = plain_text | verbatim_text | bold | italic | typewriter | emphasis | symbol | group | non_breaking_space | comment;
+const auto text_style = bold | italic | typewriter | emphasis;
+const auto math = inline_math | display_math;
+const auto phrasing_element_def = plain_text | verbatim_text | symbol | text_style |
+	single_symbol | group | non_breaking_space | comment | math;
 
 const auto paragraph_def = +phrasing_element;
 
@@ -75,6 +83,12 @@ const auto body_def = *flow_element;
 
 const auto group_def = x3::lit('{') >> *phrasing_element >> x3::lit('}');
 
+// Math
+const auto math_text_symbol = (x3::lit('\\') >> x3::char_('$')) | (x3::char_ - x3::char_('$'));
+const auto equation = +math_text_symbol;
+const auto inline_math_def = x3::lit("$") >> equation >> x3::lit("$");
+const auto display_math_def = x3::lit("$$") >> equation >> x3::lit("$$");
+
 // Text style
 const auto bold_def = x3::lit("\\textbf{") >> *phrasing_element >> x3::lit("}");
 const auto italic_def = x3::lit("\\textit{") >> *phrasing_element >> x3::lit("}");
@@ -83,6 +97,7 @@ const auto emphasis_def = x3::lit("\\emph{") >> *phrasing_element >> x3::lit("}"
 
 // Symbol
 const auto symbol_def = x3::lit('\\') >> symbols >> no_arg_command_end;
+const auto single_symbol_def = x3::lit('\\') >> x3::char_('$');
 
 /**
  * olymp.sty Examples
@@ -107,12 +122,16 @@ BOOST_SPIRIT_DEFINE(typewriter);
 BOOST_SPIRIT_DEFINE(emphasis);
 
 BOOST_SPIRIT_DEFINE(symbol);
+BOOST_SPIRIT_DEFINE(single_symbol);
 BOOST_SPIRIT_DEFINE(group);
 BOOST_SPIRIT_DEFINE(non_breaking_space);
 
 BOOST_SPIRIT_DEFINE(example);
 BOOST_SPIRIT_DEFINE(example_table);
 BOOST_SPIRIT_DEFINE(comment);
+
+BOOST_SPIRIT_DEFINE(display_math);
+BOOST_SPIRIT_DEFINE(inline_math);
 
 }  // namespace grammar
 }  // namespace lightex2

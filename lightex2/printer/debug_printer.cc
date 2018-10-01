@@ -95,6 +95,10 @@ void DebugAstPrinter::operator()(const ast::Symbol& symbol) {
   Push("Symbol " + symbol.value.Get());
 }
 
+void DebugAstPrinter::operator()(const ast::SingleSymbol& symbol) {
+  Push(std::string{"SingleSymbol "} + symbol.value);
+}
+
 void DebugAstPrinter::operator()(const ast::Group& content) {
   Push("Group");
   VisitPhrasing(content);
@@ -131,6 +135,14 @@ void DebugAstPrinter::operator()(const ast::Example& example) {
 
 void DebugAstPrinter::operator()(const ast::Comment&) {
 
+}
+
+void DebugAstPrinter::operator()(const ast::InlineMath& node) {
+  Push("InlineMath '" + EscapeC(node.equation.Get()) + "'");
+}
+
+void DebugAstPrinter::operator()(const ast::DisplayMath& node) {
+  Push("DisplayMath '" + EscapeC(node.equation.Get()) + "'");
 }
 
 void DebugAstPrinter::Push(const std::string& msg) {

@@ -10,6 +10,7 @@ target_link_libraries(lightex2 boost util)
 # Unittest
 add_executable(tester2
     tests/main.cc
+    tests/math.cc
     tests/common.cc
     tests/olymp.cc
 )

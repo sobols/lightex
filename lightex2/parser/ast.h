@@ -24,9 +24,12 @@ struct PlainText;
 struct VerbatimText;
 struct ParagraphBreaker;
 struct Symbol;
+struct SingleSymbol;
 struct Group;
 struct NonBreakingSpace;
 struct Comment;
+struct InlineMath;
+struct DisplayMath;
 
 struct Bold;
 struct Italic;
@@ -56,9 +59,12 @@ struct PhrasingElement : x3::variant<x3::forward_ast<PlainText>,
                                      x3::forward_ast<Typewriter>,
                                      x3::forward_ast<Emphasis>,
                                      x3::forward_ast<Symbol>,
+                                     x3::forward_ast<SingleSymbol>,
                                      x3::forward_ast<Group>,
                                      x3::forward_ast<NonBreakingSpace>,
-                                     x3::forward_ast<Comment>> {
+                                     x3::forward_ast<Comment>,
+                                     x3::forward_ast<InlineMath>,
+                                     x3::forward_ast<DisplayMath>> {
   PhrasingElement& operator=(const PhrasingElement&) = default;
   PhrasingElement(const PhrasingElement&) = default;
   PhrasingElement() = default;
@@ -91,6 +97,10 @@ struct Symbol : x3::position_tagged {
   String value;
 };
 
+struct SingleSymbol : x3::position_tagged {
+  char value;
+};
+
 struct Group : public PhrasingContent {
 };
 
@@ -109,6 +119,14 @@ struct ExampleTable : x3::position_tagged {
 
 struct Comment : x3::position_tagged {
 
+};
+
+// math
+struct InlineMath : x3::position_tagged {
+  String equation;
+};
+struct DisplayMath : x3::position_tagged {
+  String equation;
 };
 
 /**

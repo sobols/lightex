@@ -6,7 +6,6 @@ namespace grammar {
 
 symbols_::symbols_() {
   add("alpha", "&alpha;")("beta", "&beta;");
-  add("$", "$");
 }
 
 }  // namespace grammar

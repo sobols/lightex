@@ -28,6 +28,7 @@ class DebugAstPrinter : public boost::static_visitor<void> {
   void operator()(const ast::Emphasis&);
 
   void operator()(const ast::Symbol&);
+  void operator()(const ast::SingleSymbol&);
   void operator()(const ast::Group&);
   void operator()(const ast::NonBreakingSpace&);
 
@@ -35,6 +36,9 @@ class DebugAstPrinter : public boost::static_visitor<void> {
   void operator()(const ast::Example&);
 
   void operator()(const ast::Comment&);
+
+  void operator()(const ast::InlineMath&);
+  void operator()(const ast::DisplayMath&);
 
  private:
   void Push(const std::string& msg);

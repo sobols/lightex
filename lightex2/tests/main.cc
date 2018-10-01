@@ -166,32 +166,64 @@ BOOST_AUTO_TEST_CASE(TestSymbols) {
            "- Italic",
            "- - Symbol &beta;"});
 
+  CheckOK("\\alpha\\alpha",
+          {"Paragraph",
+           "- Symbol &alpha;",
+           "- Symbol &alpha;"});
+
+  CheckOK("A\\alpha B\\alpha \\alpha{} \\alpha",
+          {"Paragraph",
+           "- PlainText 'A'",
+           "- Symbol &alpha;",
+           "- PlainText 'B'",
+           "- Symbol &alpha;",
+           "- Symbol &alpha;",
+           "- Group",
+           "- PlainText ' '",
+           "- Symbol &alpha;"});
+
+  CheckOK("\\alpha\n\n\\alpha",
+          {"Paragraph",
+           "- Symbol &alpha;",
+           "ParagraphBreaker",
+           "Paragraph",
+           "- Symbol &alpha;"});
+
+  CheckOK("\\alpha~\\alpha",
+          {"Paragraph",
+           "- Symbol &alpha;",
+           "- NonBreakingSpace",
+           "- Symbol &alpha;"});
+}
+
+BOOST_AUTO_TEST_CASE(TestSingleSymbols) {
   CheckOK("\\$\\$",
           {"Paragraph",
-           "- Symbol $",
-           "- Symbol $"});
+           "- SingleSymbol $",
+           "- SingleSymbol $"});
 
   CheckOK("A\\$ B\\$ \\${} \\$",
           {"Paragraph",
            "- PlainText 'A'",
-           "- Symbol $",
-           "- PlainText 'B'",
-           "- Symbol $",
-           "- Symbol $",
+           "- SingleSymbol $",
+           "- PlainText ' B'",
+           "- SingleSymbol $",
+           "- PlainText ' '",
+           "- SingleSymbol $",
            "- Group",
            "- PlainText ' '",
-           "- Symbol $"});
+           "- SingleSymbol $"});
 
   CheckOK("\\$\n\n\\$",
           {"Paragraph",
-           "- Symbol $",
+           "- SingleSymbol $",
            "ParagraphBreaker",
            "Paragraph",
-           "- Symbol $"});
+           "- SingleSymbol $"});
 
   CheckOK("\\$~\\$",
           {"Paragraph",
-           "- Symbol $",
+           "- SingleSymbol $",
            "- NonBreakingSpace",
-           "- Symbol $"});
+           "- SingleSymbol $"});
 }

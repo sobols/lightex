@@ -22,8 +22,12 @@ BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::Typewriter, nodes);
 BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::Emphasis, nodes);
 
 BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::Symbol, value);
+BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::SingleSymbol, value);
 
 BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::Group, nodes);
 
 BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::Example, input, output);
 BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::ExampleTable, examples);
+
+BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::InlineMath, equation);
+BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::DisplayMath, equation);
