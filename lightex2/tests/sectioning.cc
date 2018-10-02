@@ -57,4 +57,6 @@ BOOST_AUTO_TEST_CASE(PredefinedSections) {
   // TODO: this test must fail: overflow when casting to char
   CheckOK("\\\xC5\x89nputFile",
           {"PredefinedSection InputFile"});
+  CheckOK("\\\xF0\x90\x81\x89nputFile",
+          {"PredefinedSection InputFile"});
 }
