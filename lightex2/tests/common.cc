@@ -55,3 +55,15 @@ void CheckOK(const std::string& tex, const std::vector<std::string>& expectedEle
     }
   }
 }
+
+void CheckError(const std::string& tex) {
+  boost::u8_to_u32_iterator<std::string::const_iterator> begin(tex.begin()), end(tex.end());
+  ast::Body program;
+
+  bool ok = x3::parse(begin, end, grammar::body, program) && (begin == end);
+  if (ok) {
+    std::ostringstream oss;
+    oss << '"' << EscapeC(tex) << '"' << ": expected to fail";
+    BOOST_ERROR(oss.str());
+  }
+}

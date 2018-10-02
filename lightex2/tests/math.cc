@@ -35,21 +35,36 @@ BOOST_AUTO_TEST_CASE(TestDisplayMath) {
            "- PlainText 'Note that\\n'",
            "- DisplayMath '\\n4 - 2 = 2\\n'",
            "- PlainText '\\nby definition.'"});
+
+  CheckError("$$$$");
 }
 
 BOOST_AUTO_TEST_CASE(TestInlineMath) {
   CheckOK("$2+2$",
           {"Paragraph",
            "- InlineMath '2+2'"});
+
+  CheckError("$");
+  CheckError("$\\$");
+  CheckError("$$");
 }
 
 BOOST_AUTO_TEST_CASE(TestTwoMaths) {
+  CheckOK("$inl$ $$disp$$",
+          {"Paragraph",
+           "- InlineMath 'inl'",
+           "- PlainText ' '",
+           "- DisplayMath 'disp'"});
+
   CheckOK("$inl$$$disp$$",
           {"Paragraph",
            "- InlineMath 'inl'",
            "- DisplayMath 'disp'"});
+
   CheckOK("$$disp$$$inl$",
           {"Paragraph",
            "- DisplayMath 'disp'",
            "- InlineMath 'inl'"});
+
+  CheckError("$$$");
 }
