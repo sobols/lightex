@@ -31,3 +31,7 @@ BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::ExampleTable, examples);
 
 BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::InlineMath, equation);
 BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::DisplayMath, equation);
+
+BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::Section, nodes);
+BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::Subsection, nodes);
+BOOST_FUSION_ADAPT_STRUCT(lightex2::ast::PredefinedSection, id);

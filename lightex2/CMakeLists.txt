@@ -13,5 +13,6 @@ add_executable(tester2
     tests/math.cc
     tests/common.cc
     tests/olymp.cc
+    tests/sectioning.cc
 )
 target_link_libraries(tester2 lightex2 boost_test)

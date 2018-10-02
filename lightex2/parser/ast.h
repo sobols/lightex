@@ -30,6 +30,7 @@ struct NonBreakingSpace;
 struct Comment;
 struct InlineMath;
 struct DisplayMath;
+struct Heading;
 
 struct Bold;
 struct Italic;
@@ -39,7 +40,8 @@ struct Emphasis;
 struct FlowElement : x3::variant<x3::forward_ast<Paragraph>,
                                  x3::forward_ast<ParagraphBreaker>,
                                  x3::forward_ast<ExampleTable>,
-                                 x3::forward_ast<Comment>> {
+                                 x3::forward_ast<Comment>,
+                                 x3::forward_ast<Heading>> {
   FlowElement& operator=(const FlowElement&) = default;
   FlowElement(const FlowElement&) = default;
   FlowElement() = default;
@@ -128,6 +130,29 @@ struct InlineMath : x3::position_tagged {
 struct DisplayMath : x3::position_tagged {
   String equation;
 };
+
+/**
+ * Document structure
+ */
+struct Section : public PhrasingContent {};
+struct Subsection : public PhrasingContent {};
+
+struct PredefinedSection {
+  std::string id;
+};
+
+struct Heading : x3::variant<x3::forward_ast<Section>,
+                             x3::forward_ast<Subsection>,
+                             x3::forward_ast<PredefinedSection>> {
+
+  Heading& operator=(const Heading&) = default;
+  Heading(const Heading&) = default;
+  Heading() = default;
+
+  using base_type::base_type;
+  using base_type::operator=;
+};
+
 
 /**
  * Text style

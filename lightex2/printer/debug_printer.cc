@@ -145,6 +145,24 @@ void DebugAstPrinter::operator()(const ast::DisplayMath& node) {
   Push("DisplayMath '" + EscapeC(node.equation.Get()) + "'");
 }
 
+void DebugAstPrinter::operator()(const ast::Heading& content) {
+  boost::apply_visitor(*this, content);
+}
+
+void DebugAstPrinter::operator()(const ast::Section& content) {
+  Push("Section");
+  VisitPhrasing(content);
+}
+
+void DebugAstPrinter::operator()(const ast::Subsection& content) {
+  Push("Subsection");
+  VisitPhrasing(content);
+}
+
+void DebugAstPrinter::operator()(const ast::PredefinedSection& content) {
+  Push("PredefinedSection " + content.id);
+}
+
 void DebugAstPrinter::Push(const std::string& msg) {
   std::string res;
   for (int i = 0; i < indent_; ++i) {

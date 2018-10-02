@@ -34,6 +34,12 @@ const x3::rule<class CommentId, ast::Comment> comment = "comment";
 const x3::rule<class InlineMathId, ast::InlineMath> inline_math = "inline_math";
 const x3::rule<class DisplayMathId, ast::DisplayMath> display_math = "display_math";
 
+// headings
+const x3::rule<class HeadingId, ast::Heading> heading = "heading";
+const x3::rule<class SectionId, ast::Section> section = "section";
+const x3::rule<class SubsectionId, ast::Subsection> subsection = "subsection";
+const x3::rule<class PredefinedSectionId, ast::PredefinedSection> predefined_section = "predefined_section";
+
 // text style
 const x3::rule<class BoldId, ast::Bold> bold = "bold";
 const x3::rule<class ItalicId, ast::Italic> italic = "italic";
@@ -63,7 +69,7 @@ const auto space = x3::omit[x3::skip(comment_def)[*x3::unicode::space]];
 // TeX ignores the space after control sequence during its tokenization
 const auto no_arg_command_end = x3::omit[(&x3::lit('\\') | &tex_special | &x3::eol | &x3::eoi | x3::unicode::space)];
 
-const auto flow_element_def = paragraph | paragraph_breaker | example_table;
+const auto flow_element_def = comment | paragraph | paragraph_breaker | example_table | heading;
 
 const auto text_style = bold | italic | typewriter | emphasis;
 const auto math = inline_math | display_math;
@@ -99,6 +105,12 @@ const auto emphasis_def = x3::lit("\\emph{") >> *phrasing_element >> x3::lit("}"
 const auto symbol_def = x3::lit('\\') >> symbols >> no_arg_command_end;
 const auto single_symbol_def = x3::lit('\\') >> x3::char_('$');
 
+// Headings
+const auto heading_def = section | subsection | predefined_section;
+const auto section_def = x3::lit("\\section{") >> *phrasing_element >> x3::lit("}");
+const auto subsection_def = x3::lit("\\subsection{") >> *phrasing_element >> x3::lit("}");
+const auto predefined_section_def = x3::lit('\\') >> x3::string("InputFile");
+
 /**
  * olymp.sty Examples
  */
@@ -132,6 +144,11 @@ BOOST_SPIRIT_DEFINE(comment);
 
 BOOST_SPIRIT_DEFINE(display_math);
 BOOST_SPIRIT_DEFINE(inline_math);
+
+BOOST_SPIRIT_DEFINE(heading);
+BOOST_SPIRIT_DEFINE(section);
+BOOST_SPIRIT_DEFINE(subsection);
+BOOST_SPIRIT_DEFINE(predefined_section);
 
 }  // namespace grammar
 }  // namespace lightex2

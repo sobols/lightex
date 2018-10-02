@@ -40,6 +40,11 @@ class DebugAstPrinter : public boost::static_visitor<void> {
   void operator()(const ast::InlineMath&);
   void operator()(const ast::DisplayMath&);
 
+  void operator()(const ast::Heading&);
+  void operator()(const ast::Section&);
+  void operator()(const ast::Subsection&);
+  void operator()(const ast::PredefinedSection&);
+
  private:
   void Push(const std::string& msg);
   void Indent();
